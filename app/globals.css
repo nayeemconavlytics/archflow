@@ -1,0 +1,257 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =================================================
+   ARCHFLOW — FINAL CONSOLIDATED ELITE THEME
+================================================= */
+
+:root {
+  --bg: #0b0c10;         /* Deepest cinematic black */
+  --bg-soft: #12141d;
+  --surface: rgba(27, 28, 36, 0.4);
+  --text: #ffffff;
+  --text-muted: #94a3b8;
+  --primary: #4f7cff;
+  --primary-hover: #3b63e6;
+  --primary-glow: rgba(79, 124, 251, 0.4);
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   CORE LAYOUT & Z-INDEX
+========================= */
+
+html {
+  font-size: 16px;
+  background-color: var(--bg);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  cursor: none !important;
+}
+
+body {
+  background: transparent; /* Allows Three.js Canvas to show through */
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Force custom cursor globally */
+* {
+  cursor: none !important;
+}
+
+/* LAYER 1 (BOTTOM): TWINKLING STARS */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 15% 25%, rgba(255,255,255,1), transparent 60%),
+    radial-gradient(2px 2px at 55% 35%, rgba(255,255,255,0.95), transparent 60%),
+    radial-gradient(1.5px 1.5px at 35% 65%, rgba(255,255,255,0.7), transparent 70%),
+    radial-gradient(1px 1px at 25% 50%, rgba(255,255,255,0.45), transparent 80%);
+  animation: stars-twinkle 6s ease-in-out infinite;
+}
+
+/* LAYER 2 (MIDDLE): THREE.JS CANVAS */
+canvas {
+  position: fixed !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: -2 !important;
+  pointer-events: none;
+  background: transparent !important;
+}
+
+/* LAYER 3 (TOP): UI CONTENT CONTAINER */
+.relative.z-10 {
+  z-index: 10;
+}
+
+/* =========================
+   ENHANCED TYPOGRAPHY
+========================= */
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 15px var(--primary-glow);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to bottom right, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .tracking-tight-heading {
+    letter-spacing: -0.04em;
+  }
+}
+
+/* =========================
+   ELITE UI COMPONENTS
+========================= */
+
+@layer components {
+  .container-main {
+    max-width: 85rem;
+    margin-inline: auto;
+    padding-inline: 2rem;
+  }
+
+  /* Refined Glass Card */
+  .card {
+    position: relative;
+    padding: 3rem;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .card:hover {
+    transform: translateY(-8px) scale(1.01);
+    border-color: rgba(79, 124, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Premium Button */
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 34px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    background: var(--primary);
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px var(--primary-glow);
+    overflow: hidden;
+  }
+
+  .btn-primary:hover {
+    background: #ffffff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* =========================
+   PS5 NAVIGATION BAR
+========================= */
+
+.ps5-wrapper {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 10000;
+}
+
+.ps5-bar {
+  display: flex;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(30px);
+  padding: 8px 12px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 8px;
+}
+
+.ps5-item {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ps5-item.active {
+  color: #fff;
+  background: var(--primary);
+  box-shadow: 0 0 20px var(--primary-glow);
+  transform: scale(1.1);
+}
+
+/* =========================
+   BLACK HOLE & PROGRESS
+========================= */
+
+.scroll-top {
+  position: fixed;
+  right: 36px;
+  bottom: 36px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1a1a1a 0%, #000 45%, #000 100%);
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 25px rgba(255,255,255,0.06), 0 0 60px rgba(0,0,0,1);
+  animation: blackhole-breathe 3.6s ease-in-out infinite;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes stars-twinkle {
+  0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 2px #fff); }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px #fff); }
+}
+
+@keyframes blackhole-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes wave-grow {
+  to { width: 300vmax; height: 300vmax; opacity: 0; }
+}
+
+/* =========================
+   SCROLLBAR UTILITIES
+========================= */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
