@@ -27,8 +27,8 @@ export default function Cursor() {
 
     // 2. Hover Interaction Logic
     const onHover = () => {
-      scale.current = 2.5; // Grow larger on buttons/cards
-      glow.current = 1.2;  // Intense glow
+      scale.current = 2.8; // Slightly larger for better "selection" feel
+      glow.current = 1.5;  // More intense glow
     };
 
     const onLeave = () => {
@@ -38,26 +38,38 @@ export default function Cursor() {
 
     // Attach listeners to interactive elements
     const attachListeners = () => {
-      const interactive = document.querySelectorAll("a, button, .card, .ps5-item");
+      // Expanded selector to include all interactive clinical elements
+      const interactive = document.querySelectorAll(
+        "a, button, input, select, .card, .glass-panel, [role='button']"
+      );
       interactive.forEach((el) => {
         el.addEventListener("mouseenter", onHover);
         el.addEventListener("mouseleave", onLeave);
       });
     };
 
+    // 3. MutationObserver: Watch for new buttons/cards appearing in the DOM
+    const observer = new MutationObserver(() => {
+      attachListeners();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
     // Initial attachment
     attachListeners();
 
-    // 3. Animation Loop (High Performance)
+    // 4. Animation Loop
     let animationFrameId: number;
 
     const animate = () => {
-      // Lerp (Linear Interpolation) for "heavy" gravitational movement
-      // Formula: current + (target - current) * factor
+      // Smooth movement (Lerp)
       currentX.current += (targetX.current - currentX.current) * 0.15;
       currentY.current += (targetY.current - currentY.current) * 0.15;
 
-      // Pulse effect phase
+      // Pulse effect
       wave.current += 0.05; 
       const waveOffset = Math.sin(wave.current) * 5 * glow.current;
 
@@ -67,10 +79,10 @@ export default function Cursor() {
         scale(${scale.current})
       `;
 
-      // Apply dynamic shadow based on wave pulse
+      // Apply dynamic shadow
       cursor.style.boxShadow = `
         0 0 ${20 * glow.current + waveOffset}px rgba(255,255,255,0.8),
-        0 0 ${40 * glow.current + waveOffset * 1.5}px rgba(79,124,255,0.4)
+        0 0 ${40 * glow.current + waveOffset * 1.5}px rgba(99,102,241,0.4)
       `;
 
       animationFrameId = requestAnimationFrame(animate);
@@ -83,20 +95,21 @@ export default function Cursor() {
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
     };
   }, []);
 
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 z-[99999] pointer-events-none"
+      className="fixed top-0 left-0 z-[99999] pointer-events-none transition-transform duration-300 ease-out"
       style={{
         width: 20,
         height: 20,
         borderRadius: "50%",
         backgroundColor: "white",
-        mixBlendMode: "difference", // Inverts color based on background
-        willChange: "transform",    // Optimization for GPU
+        mixBlendMode: "difference", 
+        willChange: "transform, box-shadow",
       }}
     />
   );
